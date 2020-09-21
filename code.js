@@ -5,16 +5,17 @@
   https://developer.mozilla.org/es/docs/Web/API/Document/createElement
 */
 $("ul").on("click",".remove-pokemon",remove_item_f);
+
 let get_element_li  = (name, price) => {
   return `<li class="added-pokemon">name: ${name} <div class="weight">weight:
    ${price} </div> <button class="remove-pokemon">remove</button></li>`
 }
 
-let add_item_to_list_with_template = (template_function) => {
-  return (event) => {
+// let add_item_to_list_with_template = (template_function) => {
+//   return (event) => {
 
-  }
-}
+//   }
+// }
 /*
  for removing elements could be this way
   let element_to_delete = document.querySelector("selector").lastElementChild;
@@ -22,19 +23,21 @@ let add_item_to_list_with_template = (template_function) => {
   or we could use ChildNode.remove()
   https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove
 */
-let remove_element_event = (event) => {
-  // check which dom element triggered the event of remove, that is in event
-  let remove_item  = (node_to_remove) => {
-    // add the remove logic here
-  }
-}
+// let remove_element_event = (event) => {
+//   // check which dom element triggered the event of remove, that is in event
+//   let remove_item  = (node_to_remove) => {
+//     // add the remove logic here
+//   }
+// }
 
-let thenable_handle_for_the_result_of_the_pokemon_request = (result) => {
-  //handle here the pokemon from the request
-}
+// let thenable_handle_for_the_result_of_the_pokemon_request = (result) => {
+//   //handle here the pokemon from the
+
+// }
 
 let catchable_handle_for_the_error_of_the_pokemon_request = (err) => {
   //handle here the pokemon error from the request
+  alert('ERROR!!! pokemon not found ');
 }
 
 function remove_item_f(e){
@@ -72,14 +75,16 @@ function get_pokemon(nameP){
   let promise = (result) =>{
     //recojemos lo que se pide
     result = JSON.parse(result);
-    //regresa la promesa
-    console.log(result);
+    console.log('found pokemon');
     let weight = result.weight;
-    let sprite = result.front_default;
-
+    let img = result.sprites.front_default;
+    console.log(weight);
+    let datos = get_element_li(nameP,weight);
+    console.log(datos);
+    //regresa la promesa
   };
   get_pokemon_data(nameP).then(promise).catch((err) =>{
-    error_alert(false);
+    catchable_handle_for_the_error_of_the_pokemon_request(false);
     return err;
   });
 
@@ -88,7 +93,6 @@ function get_pokemon(nameP){
 document.addEventListener("DOMContentLoaded", function (event) {
   document.getElementById('add-item').addEventListener("click", (event) => {
     nameOfPok = document.getElementById('pokemon-name').value.trim().toLowerCase();
-    console.log(nameOfPok);
     get_pokemon(nameOfPok, get_pokemon_data);
   });
 });
