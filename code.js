@@ -4,6 +4,7 @@
   Document.createElement() and add the event to that element
   https://developer.mozilla.org/es/docs/Web/API/Document/createElement
 */
+$("ul").on("click",".remove-pokemon",remove_item_f);
 let get_element_li  = (name, price) => {
   return `<li class="added-pokemon">name: ${name} <div class="weight">weight:
    ${price} </div> <button class="remove-pokemon">remove</button></li>`
@@ -36,6 +37,13 @@ let catchable_handle_for_the_error_of_the_pokemon_request = (err) => {
   //handle here the pokemon error from the request
 }
 
+function remove_item_f(e){
+  //e.preventDefault();
+
+  $(this).parent().remove();
+  //sum();
+}
+
 /*
   for this it can be solved by adding a custom XMLHttpRequest but i don't recomend it, try to
   use other libs that basically solve this, an alternative you can use axios
@@ -66,6 +74,8 @@ function get_pokemon(nameP){
     result = JSON.parse(result);
     //regresa la promesa
     console.log(result);
+    let weight = result.weight;
+    let sprite = result.front_default;
 
   };
   get_pokemon_data(nameP).then(promise).catch((err) =>{
