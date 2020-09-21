@@ -1,39 +1,11 @@
-/*this is one template function that can be passed to add_item_to_list_with_template
-  and add the remove event of the button
-  or you can create another template function wich create a dom element like
-  Document.createElement() and add the event to that element
-  https://developer.mozilla.org/es/docs/Web/API/Document/createElement
-*/
 $("ul").on("click",".remove-pokemon",remove_item_f);
+let total1=0;
+let list_item = document.getElementById("list_pokemon");
 
-let get_element_li  = (name, price) => {
-  return `<li class="added-pokemon">name: ${name} <div class="weight">weight:
-   ${price} </div> <button class="remove-pokemon">remove</button></li>`
+let get_element_li  = (name, price, image) => {
+  return `<li class="added-pokemon">name: ${name} weight: <div class="weight">
+   ${price}</div><img src=${image} alt="pokemon"> <button class="remove-pokemon">remove</button></li>`
 }
-
-// let add_item_to_list_with_template = (template_function) => {
-//   return (event) => {
-
-//   }
-// }
-/*
- for removing elements could be this way
-  let element_to_delete = document.querySelector("selector").lastElementChild;
-  element_to_delete.parentNode.removeChild(element_to_delete);
-  or we could use ChildNode.remove()
-  https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove
-*/
-// let remove_element_event = (event) => {
-//   // check which dom element triggered the event of remove, that is in event
-//   let remove_item  = (node_to_remove) => {
-//     // add the remove logic here
-//   }
-// }
-
-// let thenable_handle_for_the_result_of_the_pokemon_request = (result) => {
-//   //handle here the pokemon from the
-
-// }
 
 let catchable_handle_for_the_error_of_the_pokemon_request = (err) => {
   //handle here the pokemon error from the request
@@ -42,16 +14,10 @@ let catchable_handle_for_the_error_of_the_pokemon_request = (err) => {
 
 function remove_item_f(e){
   //e.preventDefault();
-
   $(this).parent().remove();
-  //sum();
+  sum();
 }
 
-/*
-  for this it can be solved by adding a custom XMLHttpRequest but i don't recomend it, try to
-  use other libs that basically solve this, an alternative you can use axios
-  https://www.npmjs.com/package/axios
-*/
 let get_pokemon_data = (nameP) => {
   return new Promise((resolve, reject) => {
     // add the logic of the request here
@@ -75,19 +41,20 @@ function get_pokemon(nameP){
   let promise = (result) =>{
     //recojemos lo que se pide
     result = JSON.parse(result);
-    console.log('found pokemon');
     let weight = result.weight;
-    let img = result.sprites.front_default;
-    console.log(weight);
-    let datos = get_element_li(nameP,weight);
-    console.log(datos);
+    let imga = result.sprites.front_default;
+    datos = get_element_li(nameP,weight,imga);
+    let acumulado = list_item.innerHTML;
+    list_item.innerHTML = acumulado + datos;
+    //total1 = total1 + parseFloat(weight);
+    sum();
+    return result
     //regresa la promesa
   };
   get_pokemon_data(nameP).then(promise).catch((err) =>{
     catchable_handle_for_the_error_of_the_pokemon_request(false);
     return err;
   });
-
 }
 
 document.addEventListener("DOMContentLoaded", function (event) {
@@ -96,3 +63,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
     get_pokemon(nameOfPok, get_pokemon_data);
   });
 });
+
+function sum(){
+  $(".weight").each(function(){
+    total1 += parseFloat($(this).text());
+  })
+  $("#total").replaceWith('<div id="total" >Total: '+total1+'</div>');
+  total1 =0;
+}
+
+
